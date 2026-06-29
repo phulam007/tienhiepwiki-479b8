@@ -3,7 +3,7 @@ import { getCollection, render } from 'astro:content'; // Khác biệt ở đây
 
 // 1. Hàm getStaticPaths sinh đường dẫn tĩnh
 export async function getStaticPaths() {
-  const cacNhanVat = await getCollection('nhan-vat');
+  const cacNhanVat = await getCollection('nhanVat');
   
   return cacNhanVat.map(nhanVat => ({
     // Astro v6 sử dụng nhanVat.id làm định danh mặc định cho file (thay vì .slug)
