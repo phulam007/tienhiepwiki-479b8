@@ -1,0 +1,93 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const danhSach = await getCollection('nhan-vat');
+---
+<Layout title="Nhân vật">
+  <main class="container">
+    <div class="page-header">
+      <h1>Nhân vật</h1>
+      <p>Tổng cộng {danhSach.length} nhân vật</p>
+    </div>
+
+    <div class="grid">
+      {danhSach.map(nv => (
+        <a href={`/nhan-vat/${nv.slug}`} class="card">
+          <div class="avatar">
+            {nv.data.ten.charAt(0)}
+          </div>
+          <div class="info">
+            <h2>{nv.data.ten}</h2>
+            <p class="bo-truyen">{nv.data.boTruyen}</p>
+            <p class="canh-gioi">{nv.data.canhGioi}</p>
+            <div class="tags">
+              {nv.data.tags.slice(0, 2).map(tag => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .container { max-width: 960px; margin: 40px auto; padding: 0 24px; }
+
+  .page-header { margin-bottom: 32px; }
+  .page-header h1 { font-size: 28px; color: #e2c97e; margin-bottom: 6px; }
+  .page-header p { color: #6b6b8a; font-size: 14px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4e;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .card:hover {
+    border-color: #c084fc;
+    transform: translateY(-2px);
+  }
+
+  .avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #2a1a4e;
+    border: 2px solid #c084fc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #c084fc;
+    flex-shrink: 0;
+  }
+
+  .info h2 { font-size: 16px; color: #e2c97e; margin-bottom: 4px; }
+  .bo-truyen { font-size: 12px; color: #8888aa; margin-bottom: 2px; }
+  .canh-gioi { font-size: 13px; color: #c4b5fd; margin-bottom: 8px; }
+
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: #1e1235;
+    color: #c084fc;
+    border: 1px solid #3a2a5e;
+  }
+</style>
