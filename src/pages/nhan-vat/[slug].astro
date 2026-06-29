@@ -1,18 +1,19 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
-// Astro cần biết trước tất cả các slug khi build
 export async function getStaticPaths() {
   const danhSach = await getCollection('nhanVat');
   return danhSach.map(nv => ({
-    params: { slug: nv.id },  // Astro v6 dùng nv.id thay vì nv.slug
+    params: { slug: nv.id },
     props: { nhanVat: nv },
   }));
 }
 
 const { nhanVat } = Astro.props;
-const { Content } = await nhanVat.render();
+
+// Astro v6: dùng render() import từ 'astro:content' thay vì nhanVat.render()
+const { Content } = await render(nhanVat);
 ---
 <Layout title={nhanVat.data.ten}>
   <main class="container">
