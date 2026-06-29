@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content'; // Khác biệt ở đây: import 'render' tách biệt
-
+import LayoutComp from '../../layouts/Layout.astro';
+export const Layout = LayoutComp;
 // 1. Hàm getStaticPaths sinh đường dẫn tĩnh
 export async function getStaticPaths() {
   const cacNhanVat = await getCollection('nhanVat');
