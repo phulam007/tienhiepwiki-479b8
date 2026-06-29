@@ -1,0 +1,154 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+// Astro cần biết trước tất cả các slug khi build
+export async function getStaticPaths() {
+  const danhSach = await getCollection('nhan-vat');
+  return danhSach.map(nv => ({
+    params: { slug: nv.slug },
+    props: { nhanVat: nv },
+  }));
+}
+
+const { nhanVat } = Astro.props;
+const { Content } = await nhanVat.render();
+---
+<Layout title={nhanVat.data.ten}>
+  <main class="container">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="/">Trang chủ</a> ›
+      <a href="/nhan-vat">Nhân vật</a> ›
+      <span>{nhanVat.data.ten}</span>
+    </nav>
+
+    <div class="layout">
+
+      <!-- Sidebar thông tin -->
+      <aside class="sidebar">
+        <div class="avatar-lg">
+          {nhanVat.data.ten.charAt(0)}
+        </div>
+        <h1>{nhanVat.data.ten}</h1>
+        <p class="bo-truyen">{nhanVat.data.boTruyen}</p>
+
+        <div class="tags">
+          {nhanVat.data.tags.map(tag => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+
+        <table class="info-table">
+          <tr>
+            <td class="label">Cảnh giới</td>
+            <td>{nhanVat.data.canhGioi}</td>
+          </tr>
+          <tr>
+            <td class="label">Xuất thân</td>
+            <td>{nhanVat.data.xuatThan}</td>
+          </tr>
+          {nhanVat.data.monPhai && (
+            <tr>
+              <td class="label">Môn phái</td>
+              <td>{nhanVat.data.monPhai}</td>
+            </tr>
+          )}
+        </table>
+      </aside>
+
+      <!-- Nội dung markdown -->
+      <article class="content">
+        <Content />
+      </article>
+
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .container { max-width: 1000px; margin: 40px auto; padding: 0 24px; }
+
+  .breadcrumb { font-size: 13px; color: #6b6b8a; margin-bottom: 28px; }
+  .breadcrumb a { color: #8888aa; text-decoration: none; }
+  .breadcrumb a:hover { color: #c084fc; }
+  .breadcrumb span { color: #c084fc; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4e;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    position: sticky;
+    top: 80px;
+  }
+
+  .avatar-lg {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #2a1a4e;
+    border: 3px solid #c084fc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 600;
+    color: #c084fc;
+    margin: 0 auto 16px;
+  }
+
+  .sidebar h1 { font-size: 20px; color: #e2c97e; margin-bottom: 4px; }
+  .bo-truyen { font-size: 12px; color: #8888aa; margin-bottom: 14px; }
+
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; }
+  .tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: #1e1235;
+    color: #c084fc;
+    border: 1px solid #3a2a5e;
+  }
+
+  .info-table { width: 100%; font-size: 13px; text-align: left; }
+  .info-table tr { border-bottom: 1px solid #2a2a3e; }
+  .info-table tr:last-child { border: none; }
+  .info-table td { padding: 8px 4px; color: #e2e2f0; }
+  .info-table .label { color: #6b6b8a; width: 80px; }
+
+  /* Nội dung markdown */
+  .content {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4e;
+    border-radius: 12px;
+    padding: 32px;
+  }
+
+  .content :global(h2) {
+    font-size: 18px;
+    color: #e2c97e;
+    margin: 24px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #2a2a3e;
+  }
+  .content :global(p) { color: #c0c0d8; line-height: 1.8; margin-bottom: 14px; }
+  .content :global(ul) { padding-left: 20px; color: #c0c0d8; line-height: 2; }
+  .content :global(strong) { color: #e2c97e; }
+
+  /* Responsive mobile */
+  @media (max-width: 640px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+  }
+</style>
