@@ -1,18 +1,26 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection, render } from 'astro:content'; // Khác biệt ở đây: import 'render' tách biệt
 
+// 1. Hàm getStaticPaths sinh đường dẫn tĩnh
 export async function getStaticPaths() {
-  const danhSach = await getCollection('nhanVat');
-  return danhSach.map(nv => ({
-    params: { slug: nv.id },
-    props: { nhanVat: nv },
+  const cacNhanVat = await getCollection('nhan-vat');
+  
+  return cacNhanVat.map(nhanVat => ({
+    // Astro v6 sử dụng nhanVat.id làm định danh mặc định cho file (thay vì .slug)
+    params: { slug: nhanVat.id }, 
+    props: { nhanVat },
   }));
 }
 
+// 2. Lấy dữ liệu ra
 const { nhanVat } = Astro.props;
 
-// Astro v6: dùng render() import từ 'astro:content' thay vì nhanVat.render()
+// Kiểm tra nhanh xem data có tồn tại không để tránh lỗi nát trang
+if (!nhanVat) {
+  return Astro.redirect('/404');
+}
+
+// Cách render nội dung Markdown mới của Astro v6
 const { Content } = await render(nhanVat);
 ---
 <Layout title={nhanVat.data.ten}>
