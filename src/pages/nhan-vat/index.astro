@@ -13,7 +13,7 @@ const danhSach = await getCollection('nhanVat');
 
     <div class="grid">
       {danhSach.map(nv => (
-        <a href={`/nhan-vat/${nv.slug}`} class="card">
+        <a href={`/nhan-vat/${nv.id}`} class="card">
           <div class="avatar">
             {nv.data.ten.charAt(0)}
           </div>
