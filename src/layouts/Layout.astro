@@ -1,34 +1,85 @@
 ---
-import '../../src/styles/globals.css';
-import '@fontsource-variable/inter/wght.css';
-import interWoff2 from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-
 interface Props {
-    title: string;
+  title: string;
 }
-
 const { title } = Astro.props;
 ---
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title} | Tiên Hiệp Wiki</title>
+</head>
+<body>
 
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>{title}</title>
-        <meta name="viewport" content="width=device-width" />
-        <meta name="generator" content={Astro.generator} />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="preload" as="font" type="font/woff2" href={interWoff2} crossorigin />
-    </head>
-    <body class="antialiased text-white bg-complementary">
-        <div class="flex flex-col min-h-screen px-6 bg-noise sm:px-12">
-            <div class="flex flex-col w-full max-w-5xl mx-auto grow">
-                <Header />
-                <main class="grow"><slot /></main>
-                <Footer />
-            </div>
-        </div>
-    </body>
+  <!-- HEADER -->
+  <header>
+    <a href="/" class="logo">Tiên Hiệp <span>Wiki</span></a>
+    <nav>
+      <a href="/nhan-vat">Nhân vật</a>
+      <a href="/bo-truyen">Bộ truyện</a>
+      <a href="/thuat-ngu">Thuật ngữ</a>
+      <a href="/canh-gioi">Cảnh giới</a>
+    </nav>
+  </header>
+
+  <!-- NỘI DUNG TRANG -->
+  <slot />
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Tiên Hiệp Wiki — Không vì lợi nhuận</p>
+  </footer>
+
+</body>
 </html>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: system-ui, sans-serif;
+    background: #0f0f1e;
+    color: #e2e2f0;
+    min-height: 100vh;
+  }
+
+  header {
+    background: #1a1a2e;
+    border-bottom: 1px solid #2a2a4e;
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .logo {
+    font-size: 20px;
+    font-weight: 600;
+    color: #e2c97e;
+    text-decoration: none;
+  }
+  .logo span { color: #c084fc; }
+
+  nav { display: flex; gap: 24px; }
+  nav a {
+    color: #8888aa;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: #e2c97e; }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: #6b6b8a;
+    font-size: 13px;
+    border-top: 1px solid #2a2a3e;
+    margin-top: 60px;
+  }
+</style>
